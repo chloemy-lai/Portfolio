@@ -14,11 +14,20 @@ window.addEventListener("scroll", () => {
     header.classList.remove("shrink");
   }
 
-  // hide when scrolling down
-  if (currentScroll > lastScroll && currentScroll > 100) {
+    if (currentScroll <= 0) {
+      header.classList.remove("hide");
+      header.classList.add("show");
+      lastScroll = 0;
+    return;
+  }
+
+  // hide when scrolling down, show when scrolling up
+  if (currentScroll > lastScroll) {
     header.classList.add("hide");
+    header.classList.remove("show");
   } else {
     header.classList.remove("hide");
+    header.classList.add("show");
   }
 
   lastScroll = currentScroll;
@@ -59,6 +68,26 @@ function initCountups() {
   });
 }
 
+function initSkillClickToggle() {
+  const AUTO_COLLAPSE_MS = 3000; // 3 seconds
+
+  document.querySelectorAll('.skill-item').forEach(item => {
+    item.addEventListener('click', () => {
+      // make active on click and auto-collapse after delay
+      item.classList.add('active');
+
+      if (item._collapseTimeout) {
+        clearTimeout(item._collapseTimeout);
+      }
+
+      item._collapseTimeout = setTimeout(() => {
+        item.classList.remove('active');
+        item._collapseTimeout = null;
+      }, AUTO_COLLAPSE_MS);
+    });
+  });
+}
+
 async function getYouTubeStats() {
   try {
     const response = await fetch(url);
@@ -84,7 +113,10 @@ getYouTubeStats();
 setInterval(getYouTubeStats, 900000);
 
 // run the countup class animation once on page load
-window.addEventListener('DOMContentLoaded', initCountups); 
+window.addEventListener('DOMContentLoaded', () => {
+  initCountups();
+  initSkillClickToggle();
+});
 
 // experience
 const container = document.getElementById('scrollContainer');
@@ -292,15 +324,15 @@ skillCards.forEach(card => {
   });
 });
 
-// Blur-on-enter behavior for headings and paragraphs
-const blurTargets = document.querySelectorAll('h1, p');
+// Blur-on-enter behavior for headings, paragraphs, and skill cards
+const blurTargets = document.querySelectorAll('h1, p, .skill-item');
 const blurObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('in-view');
     }
   });
-}, { threshold: 0.2 });
+}, { threshold: 0.0 });
 
 blurTargets.forEach(el => {
   blurObserver.observe(el);
