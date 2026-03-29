@@ -459,16 +459,15 @@ nav ul li a:hover{
     }
 
     .skill-item:hover .skill-extra {    
-        .skillList{
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px;
         justify-content: center;
         align-items: center;
-    }
         max-height: 50px;
     }
-}
+        
+    }
 
 .skillList{
     display:grid;

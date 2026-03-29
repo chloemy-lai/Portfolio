@@ -322,6 +322,23 @@ skillCards.forEach(card => {
   card.addEventListener('mouseleave', () => {
     card.style.animationPlayState = 'running';
   });
+
+  card.addEventListener('click', () => {
+  skillCards.forEach(c => {
+    if (c !== card) {
+      c.classList.remove('active');
+      c.style.animationPlayState = 'running';
+    }
+  });
+
+  card.classList.toggle('active');
+
+  if (card.classList.contains('active')) {
+    card.style.animationPlayState = 'paused';
+  } else {
+    card.style.animationPlayState = 'running';
+  }
+});
 });
 
 // Blur-on-enter behavior for headings, paragraphs, and skill cards
